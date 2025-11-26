@@ -40,6 +40,11 @@
         dest: /usr/share/nginx/html
         remote_src: yes
 
+    - name: Copy ngnix config file
+      ansible.builtin.copy:
+        src: nginx.conf
+        dest: /etc/nginx/nginx.conf
+
     - name: start Nginx services
       ansible.builtin.service:
         name: nginx
