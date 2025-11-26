@@ -19,29 +19,29 @@
   hosts: all
   become: true
   tasks:
-  - name: Install Ngnix 1.24
-    ansible.builtin.dnf:
-      name: '@nginx:1.24'
-      state: present
+    - name: Install Ngnix 1.24
+      ansible.builtin.dnf:
+        name: '@nginx:1.24'
+        state: present
 
-  - name: Remove application html directory
-    ansible.builtin.file:
-    path: /usr/share/nginx/html/
-    state: absent
+    - name: Remove application html directory
+      ansible.builtin.file:
+        path: /usr/share/nginx/html/
+        state: absent
 
-  - name: Create HTML application directory
-    ansible.builtin.file:
-    path: /usr/share/nginx/html/
-    state: directory
+    - name: Create HTML application directory
+      ansible.builtin.file:
+        path: /usr/share/nginx/html/
+        state: directory
 
-  - name: Download and extract application
-    ansible.builtin.unarchive:
-     src: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
-     dest: /usr/share/nginx/html/
-     remote_src: yes
+    - name: Download and extract application
+      ansible.builtin.unarchive:
+        src: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
+        dest: /usr/share/nginx/html/
+        remote_src: yes
 
-  - name: start Ngnix services
-    ansible.builtin.systemd_service:
-      name: ngnix
-      enabled: true
-      state: restarted
+    - name: start Ngnix services
+      ansible.builtin.systemd_service:
+        name: ngnix
+        enabled: true
+        state: restarted
