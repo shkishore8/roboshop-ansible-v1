@@ -19,7 +19,7 @@
   hosts: all
   become: true
   tasks:
-  - name: Install Ngnix
+  - name: Install Ngnix 1.24
     ansible.builtin.dnf:
       name: '@nginx:1.24'
       state: present
