@@ -17,6 +17,7 @@
 
 - name: frontend Setup
   hosts: all
+  become: true
   tasks:
   - name: Install Ngnix
     ansible.builtin.dnf:
