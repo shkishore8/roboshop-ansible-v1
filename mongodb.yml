@@ -11,6 +11,7 @@
   hosts: all
   become: true
   tasks:
+
     - name: Copy mongodb config file
       ansible.builtin.copy:
         src: mongo.repo
@@ -18,7 +19,7 @@
 
     - name: Install mongodb
       ansible.builtin.dnf:
-        name: 'mongodb-org'
+        name: '@mongodb-org'
         state: present
 
     - name: Replace mongodb to 0.0.0.

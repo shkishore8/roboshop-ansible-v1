@@ -1,0 +1,88 @@
+#dnf module disable nodejs -y
+#dnf module enable nodejs:20 -y
+#
+#dnf install nodejs -y
+#
+#useradd roboshop
+#cp catalogue.service /etc/systemd/system/catalogue.service
+#cp mongo.repo /etc/yum.repos.d/mongo.repo
+#
+#
+#mkdir /app
+#
+#curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
+#cd /app
+#unzip /tmp/catalogue.zip
+#
+#cd /app
+#npm install
+#
+#dnf install mongodb-mongosh -y
+#mongosh --host mongodb-dev.rdevopsb87.online </app/db/master-data.js
+#
+#
+#systemctl enable catalogue
+#systemctl restart catalogue
+
+- name: catalogue Setup
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Install nodejs 20
+      ansible.builtin.dnf:
+        name: '@nodejs:20'
+        state: present
+
+    - name: Add roboshop user
+      ansible.builtin.user:
+        name: roboshop
+
+    - name: Copy catalogue config file
+      ansible.builtin.copy:
+        src: catalogue.service
+        dest: /etc/systemd/system/catalogue.service
+
+    - name: Copy mongo repository
+      ansible.builtin.copy:
+        src: mongo.repo
+        dest: /etc/yum.repos.d/mongo.rep
+
+    - name: Delete directory
+      ansible.builtin.file:
+        path: /app
+        state: absent
+
+    - name: Create application directory
+      ansible.builtin.file:
+        path: /app
+        state: directory
+
+    - name: Download and extract catalogue app
+      ansible.builtin.unarchive:
+        src: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
+        dest: /app
+        remote_src: yes
+
+    - name: Install npm dependencies
+      community.general.npm:
+        path: /app
+
+    - name: Install mongodb client
+      ansible.builtin.dnf:
+        name: 'mongodb-mongosh'
+        state: present
+
+    - name: Load mongodb masterfile
+      community.mongodb.mongodb_shell:
+        file: "/app/db/master-data.js"
+        login_host: 1732.168.0.0
+        idempotent: yes
+
+    - name: start catalogue services
+      ansible.builtin.service:
+        name: catalogue
+        state: started
+        enabled: yes
+
+
