@@ -31,13 +31,13 @@
 
     - name: Create HTML application directory
       ansible.builtin.file:
-        path: /usr/share/nginx/html/
+        path: /usr/share/nginx/html
         state: directory
 
     - name: Download and extract application
       ansible.builtin.unarchive:
         src: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
-        dest: /usr/share/nginx/html/
+        dest: /usr/share/nginx/html
         remote_src: yes
 
     - name: start Ngnix services
