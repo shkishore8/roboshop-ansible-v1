@@ -80,6 +80,7 @@
       ansible.builtin.service:
         name: catalogue
         state: restarted
-        enabled: yes
+        enabled: true
+        daemon_reload: true
 
 
