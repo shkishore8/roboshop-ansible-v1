@@ -20,10 +20,10 @@
 #systemctl enable cart
 #systemctl restart cart
 
-name: Cart Setup
-hosts: all
-become: true
-tasks:
+-name: Cart Setup
+ hosts: all
+ become: true
+ tasks:
 
   - name: Install NodeJS 20
     ansible.builtin.dnf:
