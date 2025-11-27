@@ -46,7 +46,7 @@
     - name: Copy mongo repository
       ansible.builtin.copy:
         src: mongo.repo
-        dest: /etc/yum.repos.d/mongo.rep
+        dest: /etc/yum.repos.d/mongo.repo
 
     - name: Delete directory
       ansible.builtin.file:
