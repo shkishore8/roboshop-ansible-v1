@@ -20,48 +20,48 @@
 #systemctl enable cart
 #systemctl restart cart
 
--name: Cart Setup
- hosts: all
- become: true
- tasks:
+- name: Cart Setup
+  hosts: all
+  become: true
+  tasks:
 
-  - name: Install NodeJS 20
-    ansible.builtin.dnf:
-      name: '@nodejs:20'
-      state: present
+    - name: Install NodeJS 20
+      ansible.builtin.dnf:
+        name: '@nodejs:20'
+        state: present
 
-  - name: Add roboshop application user
-    ansible.builtin.user:
-      name: roboshop
+    - name: Add roboshop application user
+      ansible.builtin.user:
+         name: roboshop
 
-  - name: Copy user service config
-    ansible.builtin.copy:
-      src: cart.service
-      dest: /etc/systemd/system/cart.service
+    - name: Copy user service config
+      ansible.builtin.copy:
+         src: cart.service
+         dest: /etc/systemd/system/cart.service
 
-  - name: Remove app directory
-    ansible.builtin.file:
-      path: /app
-      state: absent
+    - name: Remove app directory
+      ansible.builtin.file:
+         path: /app
+         state: absent
 
-  - name: Create app directory
-    ansible.builtin.file:
-      path: /app
-      state: directory
+    - name: Create app directory
+      ansible.builtin.file:
+         path: /app
+         state: directory
 
-  - name: Download and extract app content
-    ansible.builtin.unarchive:
-      src: https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip
-      dest: /app
-      remote_src: yes
+    - name: Download and extract app content
+      ansible.builtin.unarchive:
+         src: https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip
+         dest: /app
+         remote_src: yes
 
-  - name: Install packages based on package.json.
-    community.general.npm:
-      path: /app
+    - name: Install packages based on package.json.
+      community.general.npm:
+          path: /app
 
-  - name: Start cart service
-    ansible.builtin.systemd_service:
-      state: restarted
-      name: cart
-      enabled: true
-      daemon_reload: true
+    - name: Start cart service
+      ansible.builtin.systemd_service:
+          state: restarted
+          name: cart
+          enabled: true
+          daemon_reload: true
