@@ -12,7 +12,7 @@
   hosts: all
   become: true
   tasks:
-    - name: Install Ngnix 1.24
+    - name: Install redis
       ansible.builtin.dnf:
         name: 'redis:7'
         state: present
