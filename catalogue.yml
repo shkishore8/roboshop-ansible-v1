@@ -73,11 +73,8 @@
         name: 'mongodb-mongosh'
         state: present
 
-    - name: Load mongodb masterfile
-      community.mongodb.mongodb_shell:
-        file: "/app/db/master-data.js"
-        login_host: 1732.168.0.0
-        idempotent: yes
+    - name: Load Master Data
+      ansible.builtin.shell: mongosh --host mongodb-dev.rdevopsb87.online </app/db/master-data.js
 
     - name: start catalogue services
       ansible.builtin.service:
