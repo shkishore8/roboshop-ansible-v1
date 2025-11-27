@@ -70,7 +70,7 @@
 
     - name: Install mongodb client
       ansible.builtin.dnf:
-        name: 'mongodb-mongosh'
+        name: mongodb-mongosh
         state: present
 
     - name: Load Master Data
