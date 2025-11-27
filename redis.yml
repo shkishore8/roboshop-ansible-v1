@@ -15,7 +15,7 @@
 
     - name: Install Redis 7
       ansible.builtin.dnf:
-        name: 'redis:7'
+        name: '@redis:7'
         state: present
 
     - name: replace IP address
