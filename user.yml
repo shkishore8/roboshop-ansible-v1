@@ -20,11 +20,10 @@
 # systemctl enable user
 # systemctl restart user
 
-- name: user Setup
+- name: User Setup
   hosts: all
   become: true
   tasks:
-
     - name: Install NodeJS 20
       ansible.builtin.dnf:
         name: '@nodejs:20'
@@ -33,11 +32,6 @@
     - name: Add roboshop application user
       ansible.builtin.user:
         name: roboshop
-
-    - name: Copy user service config
-      ansible.builtin.copy:
-        src: user.service
-        dest: /etc/systemd/system/user.service
 
     - name: Remove app directory
       ansible.builtin.file:
@@ -59,7 +53,12 @@
       community.general.npm:
         path: /app
 
-    - name: Start user service
+    - name: Copy user service file
+      ansible.builtin.copy:
+        src: user.service
+        dest: /etc/systemd/system/user.service
+
+    - name: Start User service
       ansible.builtin.systemd_service:
         state: restarted
         name: user
