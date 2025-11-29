@@ -1,1 +1,0 @@
-# roboshop-ansible-v1
