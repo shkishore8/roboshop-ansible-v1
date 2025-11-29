@@ -1,0 +1,67 @@
+# dnf install python3 gcc python3-devel -y
+# useradd roboshop
+#
+# cp payment.service /etc/systemd/system/payment.service
+#
+#
+# mkdir /app
+# curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip
+# cd /app
+# unzip /tmp/payment.zip
+#
+# cd /app
+# pip3 install -r requirements.txt
+#
+# systemctl daemon-reload
+# systemctl enable payment
+# systemctl restart payment
+
+
+- name: Payment  Setup
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Python and gcc
+      ansible.builtin.dnf:
+        name:
+          - python3
+          - gcc
+          - python3-devel
+        state: present
+
+    - name: Add roboshop application user
+      ansible.builtin.user:
+        name: roboshop
+
+    - name: Remove app directory
+      ansible.builtin.file:
+        path: /app
+        state: absent
+
+    - name: Create app directory
+      ansible.builtin.file:
+        path: /app
+        state: directory
+
+    - name: Download and extract app content
+      ansible.builtin.unarchive:
+        src: https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip
+        dest: /app
+        remote_src: yes
+
+    - name: Install specified python requirements
+      ansible.builtin.pip:
+        requirements: /app/requirements.txt
+        executable: pip3
+
+    - name: Copy payment service file
+      ansible.builtin.copy:
+        src: payment.service
+        dest: /etc/systemd/system/payment.service
+
+    - name: Start payment service
+      ansible.builtin.systemd_service:
+        state: restarted
+        name: payment
+        enabled: true
+        daemon_reload: true
