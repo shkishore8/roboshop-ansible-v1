@@ -1,0 +1,12 @@
+[Unit]
+Description = Cart Service
+[Service]
+User=roboshop
+Environment=REDIS_HOST=dev.radis.shkishore.online
+Environment=CATALOGUE_HOST=dev.catalogue.shkishore.online
+Environment=CATALOGUE_PORT=8080
+ExecStart=/bin/node /app/server.js
+SyslogIdentifier=cart
+
+[Install]
+WantedBy=multi-user.target
